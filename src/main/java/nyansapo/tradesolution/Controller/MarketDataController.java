@@ -20,26 +20,33 @@ public class MarketDataController {
     @Autowired
     public MarketDataService marketDataService;
 
+    @Autowired
+    MarketDataDao marketDataDao;
+
 
     @RequestMapping(value = "/MarketData1", method = RequestMethod.GET)
-    public Flux<MarketDataEntity> getAllMarketData1() {
+    public List<MarketDataEntity> getAllMarketData1() {
         Flux<MarketDataEntity> marketDataResponse = this.marketDataService.getAllMarketData1();
-        MarketDataDao marketDataDao = new MarketDataDao();
         marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
             marketDataDao.save(entity);
         });
-        return marketDataResponse;
+
+        Flux<MarketDataEntity> marketDataResponse2 = this.marketDataService.getAllMarketData2();
+        marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
+            marketDataDao.save(entity);
+        });
+        return marketDataService.fetchAllMarketData1();
     }
 
-    @RequestMapping(value = "/MarketData2", method = RequestMethod.GET)
-    public Flux<MarketDataEntity> getAllMarketData2() {
-        Flux<MarketDataEntity> marketDataResponse = this.marketDataService.getAllMarketData2();
-        MarketDataDao marketDataDao = new MarketDataDao();
-        marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
-            marketDataDao.save(entity);
-        });
-        return marketDataResponse;
-    }
+//    @RequestMapping(value = "/MarketData2", method = RequestMethod.GET)
+//    public Flux<MarketDataEntity> getAllMarketData2() {
+//        Flux<MarketDataEntity> marketDataResponse = this.marketDataService.getAllMarketData2();
+//        MarketDataDao marketDataDao = new MarketDataDao();
+//        marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
+//            marketDataDao.save(entity);
+//        });
+//        return marketDataResponse;
+//    }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public List<MarketDataEntity> collectAllMarketData() {

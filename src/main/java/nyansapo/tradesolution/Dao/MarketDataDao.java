@@ -35,13 +35,11 @@ public class MarketDataDao {
 
 
     public Optional<MarketDataEntity> getBestBuyingValue(String ticker) {
-        return marketDataEntity.stream().filter(tick -> tick.getTicker().equals(ticker)).collect(Collectors.toList())
-                .stream().min(Comparator.comparing(MarketDataEntity::getMax_price_shift));
+        return filterByTicker(ticker).stream().min(Comparator.comparing(MarketDataEntity::getMax_price_shift));
     }
 
     public Optional <MarketDataEntity> getBestSellingValue(String ticker) {
-        return marketDataEntity.stream().filter(tick -> tick.getTicker().equals(ticker)).collect(Collectors.toList())
-                .stream().max(Comparator.comparing(MarketDataEntity::getMax_price_shift));
+        return filterByTicker(ticker).stream().max(Comparator.comparing(MarketDataEntity::getMax_price_shift));
     }
 
 
