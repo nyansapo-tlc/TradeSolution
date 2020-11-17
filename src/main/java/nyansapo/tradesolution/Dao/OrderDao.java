@@ -34,7 +34,6 @@ public class OrderDao {
         if (orderEntity.getTicker().equals("BUY")) {
             marketDataDao.getBestBuyingValue(orderEntity.getTicker());
         }
-
         return null;
     }
 
