@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class MarketDataController {
+public class TradeEngineController {
 
     @Autowired
     public MarketDataService marketDataService;
@@ -24,7 +24,7 @@ public class MarketDataController {
     MarketDataDao marketDataDao;
 
 
-    @RequestMapping(value = "/MarketData1", method = RequestMethod.GET)
+    @RequestMapping(value = "/exchangedata", method = RequestMethod.GET)
     public List<MarketDataEntity> getAllMarketData1() {
         Flux<MarketDataEntity> marketDataResponse = this.marketDataService.getAllMarketData1();
         marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
@@ -38,49 +38,30 @@ public class MarketDataController {
         return marketDataService.fetchAllMarketData1();
     }
 
-//    @RequestMapping(value = "/MarketData2", method = RequestMethod.GET)
-//    public Flux<MarketDataEntity> getAllMarketData2() {
-//        Flux<MarketDataEntity> marketDataResponse = this.marketDataService.getAllMarketData2();
-//        MarketDataDao marketDataDao = new MarketDataDao();
-//        marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
-//            marketDataDao.save(entity);
-//        });
-//        return marketDataResponse;
-//    }
 
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @RequestMapping(value = "data", method = RequestMethod.GET)
     public List<MarketDataEntity> collectAllMarketData() {
         return marketDataService.fetchAllMarketData1();
     }
 
     @RequestMapping(value = "/filter/{ticker}", method = RequestMethod.GET)
     public List<MarketDataEntity> controllerFilterByTicker (@PathVariable("ticker") String ticker) {
+        getAllMarketData1();
         return marketDataService.serviceFilterByTicker(ticker);
     }
 
     @RequestMapping(value = "buying/{ticker}", method = RequestMethod.GET)
     public Optional<MarketDataEntity> controllerGetBestBuyingValue(@PathVariable("ticker") String ticker) {
+        getAllMarketData1();
         return marketDataService.serviceGetBestBuyingValue(ticker);
     }
 
     @RequestMapping(value = "selling/{ticker}", method = RequestMethod.GET)
     public Optional<MarketDataEntity> controllerGetBestSellingValue(@PathVariable("ticker") String ticker) {
+        getAllMarketData1();
         return marketDataService.serviceGetBestSellingValue(ticker);
     }
 
-
-
-
-//    public MarketDataEntity controllerGetBestBuyingValue(@PathVariable ("ticker") String ticker) {
-//        return marketDataService.serviceGetBestBuyingValue(ticker);
-//    }
-
-
-    // display all market Data with same ticker via Market Data Service
-//    @RequestMapping(value = "/{ticker}", method = RequestMethod.GET)
-//    public MarketDataEntity getMarketDataByTicker(@PathVariable("ticker") String ticker) {
-//        return this.marketDataService.getMarketDataByTicker(ticker);
-//    }
 
 
 }

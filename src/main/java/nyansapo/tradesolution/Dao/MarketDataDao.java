@@ -9,28 +9,28 @@ import java.util.stream.Collectors;
 @Repository
 public class MarketDataDao {
 
-    private static List<MarketDataEntity> marketDataEntity;
+    private static List<MarketDataEntity> marketDataEntityList;
 
     static {
-        marketDataEntity = new ArrayList<MarketDataEntity>() {
+        marketDataEntityList = new ArrayList<MarketDataEntity>() {
 
         };
     }
 
     public List<MarketDataEntity> getAllMarketData1() {
-        return this.marketDataEntity;
+        return this.marketDataEntityList;
     }
 
     public void save (MarketDataEntity marketDataEntity) {
-        if (!this.marketDataEntity.isEmpty() && this.marketDataEntity.size() >= 16) {
-            this.marketDataEntity.clear();
+        if (!this.marketDataEntityList.isEmpty() && this.marketDataEntityList.size() >= 16) {
+            this.marketDataEntityList.clear();
         }
-        this.marketDataEntity.add(marketDataEntity);
+        this.marketDataEntityList.add(marketDataEntity);
 
     }
 
     public List<MarketDataEntity> filterByTicker (String ticker) {
-        return marketDataEntity.stream().filter(tick -> tick.getTicker().equals(ticker)).collect(Collectors.toList());
+        return marketDataEntityList.stream().filter(tick -> tick.getTicker().equals(ticker)).collect(Collectors.toList());
     }
 
 
