@@ -1,13 +1,13 @@
-package nyansapo.tradesolution;
+   package nyansapo.tradesolution;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TradeSolutionApplication {
+public class TradesolutionApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TradeSolutionApplication.class, args);
+        SpringApplication.run(TradesolutionApplication.class, args);
     }
 
 }
