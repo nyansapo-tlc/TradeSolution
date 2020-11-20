@@ -1,9 +1,11 @@
 package nyansapo.tradesolution.Controller;
 
-import nyansapo.tradesolution.Dao.MarketDataDao;
-import nyansapo.tradesolution.Entity.MarketDataEntity;
-import nyansapo.tradesolution.Dao.MarketDataDao;
-import nyansapo.tradesolution.Service.MarketDataService;
+import nyansapo.tradesolution.Dao.OrderDataDao;
+import nyansapo.tradesolution.Dao.ValidatedOrderDao;
+import nyansapo.tradesolution.Entity.OderData;
+import nyansapo.tradesolution.Entity.ValidatedOrder;
+import nyansapo.tradesolution.Service.OrderDataService;
+import nyansapo.tradesolution.Service.ValidatedOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,50 +19,66 @@ import java.util.Optional;
 @RestController
 public class TradeEngineController {
 
-    @Autowired
-    public MarketDataService marketDataService;
 
-    @Autowired
-    MarketDataDao marketDataDao;
+    private OrderDataService orderDataService = new OrderDataService();
+
+    private OrderDataDao orderDataDao = new OrderDataDao();
+    private ValidatedOrderService validatedOrderService = new ValidatedOrderService();
+
+    private String exchange_Path[] = {"https://exchange.matraining.com", "https://exchange2.matraining.com"};
 
 
-    @RequestMapping(value = "/exchangedata", method = RequestMethod.GET)
-    public List<MarketDataEntity> getAllMarketData1() {
-        Flux<MarketDataEntity> marketDataResponse = this.marketDataService.getAllMarketData1();
-        marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
-            marketDataDao.save(entity);
+    @RequestMapping(value = "/m", method = RequestMethod.GET)
+    public List<OderData> getAllMarketData1() {
+        Flux<OderData> marketDataResponse = this.orderDataService.getAllOrderData1();
+        marketDataResponse.toStream().forEach((OderData data)->{
+            data.setExchange_Path(exchange_Path[0]);
+            orderDataDao.save(data);
         });
 
-        Flux<MarketDataEntity> marketDataResponse2 = this.marketDataService.getAllMarketData2();
-        marketDataResponse.toStream().forEach((MarketDataEntity entity)->{
-            marketDataDao.save(entity);
+        Flux<OderData> marketDataResponse2 = this.orderDataService.getAllOrderData2();
+        marketDataResponse2.toStream().forEach((OderData data)->{
+            data.setExchange_Path(exchange_Path[1]);
+            orderDataDao.save(data);
         });
-        return marketDataService.fetchAllMarketData1();
+        return orderDataService.fetchAllOrderData1();
     }
 
 
-    @RequestMapping(value = "data", method = RequestMethod.GET)
-    public List<MarketDataEntity> collectAllMarketData() {
-        return marketDataService.fetchAllMarketData1();
+    @RequestMapping(value = "/data", method = RequestMethod.GET)
+    public List<OderData> collectAllMarketData() {
+        getAllMarketData1();
+        return orderDataService.fetchAllOrderData1();
     }
 
     @RequestMapping(value = "/filter/{ticker}", method = RequestMethod.GET)
-    public List<MarketDataEntity> controllerFilterByTicker (@PathVariable("ticker") String ticker) {
+    public List<OderData> controllerFilterByProductName (@PathVariable("ticker") String ticker) {
         getAllMarketData1();
-        return marketDataService.serviceFilterByTicker(ticker);
+        return orderDataService.serviceFilterByProductName(ticker);
     }
 
     @RequestMapping(value = "buying/{ticker}", method = RequestMethod.GET)
-    public Optional<MarketDataEntity> controllerGetBestBuyingValue(@PathVariable("ticker") String ticker) {
+    public Optional<OderData> controllerGetBestBuyingValue(@PathVariable("ticker") String ticker) {
         getAllMarketData1();
-        return marketDataService.serviceGetBestBuyingValue(ticker);
+        return orderDataService.serviceGetBestBuyingValue(ticker);
     }
 
     @RequestMapping(value = "selling/{ticker}", method = RequestMethod.GET)
-    public Optional<MarketDataEntity> controllerGetBestSellingValue(@PathVariable("ticker") String ticker) {
+    public Optional<OderData> controllerGetBestSellingValue(@PathVariable("ticker") String ticker) {
         getAllMarketData1();
-        return marketDataService.serviceGetBestSellingValue(ticker);
+        return orderDataService.serviceGetBestSellingValue(ticker);
     }
+
+    @RequestMapping(value = "/val", method = RequestMethod.GET)
+    public List<ValidatedOrder> controllerGetOrderEntityList() {
+        return validatedOrderService.ServiceGetOrderEntityList();
+    }
+
+//    @RequestMapping(value = "g1/{ticker}", method = RequestMethod.GET)
+//    public double cBuyingValue(@PathVariable("ticker") String ticker) {
+//        getAllMarketData1();
+//        return marketDataService.BuyingValue(ticker);
+//    }
 
 
 
