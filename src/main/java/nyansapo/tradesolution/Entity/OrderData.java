@@ -2,7 +2,9 @@ package nyansapo.tradesolution.Entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OderData {
+import java.util.Comparator;
+
+public class OrderData {
 
     @JsonProperty("product")
     private String productName;
@@ -16,15 +18,19 @@ public class OderData {
     @JsonProperty("side")
     private  String side;
 
+    @JsonProperty("cumulatitiveQuantity")
+    private int cumulatitiveQty;
+
     private String exchange_Path;
 
-    public OderData (){}
+    public OrderData(){}
 
-    public OderData (String productName, int quantity, Double price, String side, String exchange_Path) {
+    public OrderData(String productName, int quantity, Double price, String side, int cumulatitiveQty, String exchange_Path) {
         this.productName = productName;
         this.quantity = quantity;
         this.price = price;
         this.side = side;
+        this.cumulatitiveQty = cumulatitiveQty;
         this.exchange_Path = exchange_Path;
     }
 
@@ -43,6 +49,10 @@ public class OderData {
 
     public void setSide(String side) {
         this.side = side;
+    }
+
+    public void setCumulatitiveQty(int cumulatitiveQty) {
+        this.cumulatitiveQty = cumulatitiveQty;
     }
 
     public void setExchange_Path(String exchange_Path) {
@@ -67,7 +77,16 @@ public class OderData {
         return side;
     }
 
+    public int getCumulatitiveQty() {
+        return cumulatitiveQty;
+    }
+
     public String getExchange_Path() {
         return exchange_Path;
     }
+
+
+
+    public  static Comparator<OrderData> sortByLowPrice = (data1, data2) -> Double.compare(data1.price, data2.price);
+    public  static Comparator<OrderData> sortByHighPrice = (data1, data2) -> Double.compare(data1.price, data2.price);
 }

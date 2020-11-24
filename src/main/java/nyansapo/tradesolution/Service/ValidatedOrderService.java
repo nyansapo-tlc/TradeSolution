@@ -16,7 +16,4 @@ public class ValidatedOrderService {
 
     }
 
-    public String tickerName (){
-        return validatedOrderDao.getTickerName();
-    }
 }

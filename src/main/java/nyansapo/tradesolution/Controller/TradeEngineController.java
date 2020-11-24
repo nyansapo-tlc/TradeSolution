@@ -1,12 +1,10 @@
 package nyansapo.tradesolution.Controller;
 
 import nyansapo.tradesolution.Dao.OrderDataDao;
-import nyansapo.tradesolution.Dao.ValidatedOrderDao;
-import nyansapo.tradesolution.Entity.OderData;
+import nyansapo.tradesolution.Entity.OrderData;
 import nyansapo.tradesolution.Entity.ValidatedOrder;
 import nyansapo.tradesolution.Service.OrderDataService;
 import nyansapo.tradesolution.Service.ValidatedOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,15 +27,15 @@ public class TradeEngineController {
 
 
     @RequestMapping(value = "/m", method = RequestMethod.GET)
-    public List<OderData> getAllMarketData1() {
-        Flux<OderData> marketDataResponse = this.orderDataService.getAllOrderData1();
-        marketDataResponse.toStream().forEach((OderData data)->{
+    public List<OrderData> getAllMarketData1() {
+        Flux<OrderData> marketDataResponse = this.orderDataService.getAllOrderData1();
+        marketDataResponse.toStream().forEach((OrderData data)->{
             data.setExchange_Path(exchange_Path[0]);
             orderDataDao.save(data);
         });
 
-        Flux<OderData> marketDataResponse2 = this.orderDataService.getAllOrderData2();
-        marketDataResponse2.toStream().forEach((OderData data)->{
+        Flux<OrderData> marketDataResponse2 = this.orderDataService.getAllOrderData2();
+        marketDataResponse2.toStream().forEach((OrderData data)->{
             data.setExchange_Path(exchange_Path[1]);
             orderDataDao.save(data);
         });
@@ -46,25 +44,25 @@ public class TradeEngineController {
 
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
-    public List<OderData> collectAllMarketData() {
+    public List<OrderData> collectAllMarketData() {
         getAllMarketData1();
         return orderDataService.fetchAllOrderData1();
     }
 
-    @RequestMapping(value = "/filter/{ticker}", method = RequestMethod.GET)
-    public List<OderData> controllerFilterByProductName (@PathVariable("ticker") String ticker) {
+    @RequestMapping(value = "/filter/{side}/{ticker}", method = RequestMethod.GET)
+    public List<OrderData> controllerFilterByProductName (@PathVariable String side, String ticker) {
         getAllMarketData1();
         return orderDataService.serviceFilterByProductName(ticker);
     }
 
     @RequestMapping(value = "buying/{ticker}", method = RequestMethod.GET)
-    public Optional<OderData> controllerGetBestBuyingValue(@PathVariable("ticker") String ticker) {
+    public Optional<OrderData> controllerGetBestBuyingValue(@PathVariable("ticker") String ticker) {
         getAllMarketData1();
         return orderDataService.serviceGetBestBuyingValue(ticker);
     }
 
     @RequestMapping(value = "selling/{ticker}", method = RequestMethod.GET)
-    public Optional<OderData> controllerGetBestSellingValue(@PathVariable("ticker") String ticker) {
+    public Optional<OrderData> controllerGetBestSellingValue(@PathVariable("ticker") String ticker) {
         getAllMarketData1();
         return orderDataService.serviceGetBestSellingValue(ticker);
     }
@@ -73,6 +71,7 @@ public class TradeEngineController {
     public List<ValidatedOrder> controllerGetOrderEntityList() {
         return validatedOrderService.ServiceGetOrderEntityList();
     }
+
 
 //    @RequestMapping(value = "g1/{ticker}", method = RequestMethod.GET)
 //    public double cBuyingValue(@PathVariable("ticker") String ticker) {

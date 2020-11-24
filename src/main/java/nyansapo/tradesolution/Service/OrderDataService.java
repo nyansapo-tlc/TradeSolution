@@ -1,7 +1,8 @@
 package nyansapo.tradesolution.Service;
 
 import nyansapo.tradesolution.Dao.OrderDataDao;
-import nyansapo.tradesolution.Entity.OderData;
+import nyansapo.tradesolution.Dao.ValidatedOrderDao;
+import nyansapo.tradesolution.Entity.OrderData;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,6 +10,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -16,48 +18,59 @@ public class OrderDataService {
 
 
     private OrderDataDao orderDataDao = new OrderDataDao();
-    private OderData oderData = new OderData();
-    private ValidatedOrderService validatedOrderService = new ValidatedOrderService();
+    private OrderData orderData = new OrderData();
+    private ValidatedOrderDao validatedOrderDao = new ValidatedOrderDao();
 
 //    String ticker = validatedOrderService.tickerName();
 
     // return all MDE
-    public Flux<OderData> getAllOrderData1() {
-        String ticker = validatedOrderService.tickerName();
+    public Flux<OrderData> getAllOrderData1() {
+        String ticker = validatedOrderDao.getTickerName().toUpperCase();
+        String orderType = validatedOrderDao.getSide().toLowerCase();
+        String URI = "/orderbook/" +ticker+ "/" + orderType;
+
        return  WebClient.builder().baseUrl("https://exchange.matraining.com")
                 .build().get()
-                .uri("/orderbook/" +ticker+ "/open")
+                .uri(URI)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToFlux(OderData.class);
+                .bodyToFlux(OrderData.class);
     }
 
-    public Flux<OderData> getAllOrderData2() {
-        String ticker = validatedOrderService.tickerName();
+    public Flux<OrderData> getAllOrderData2() {
+        String ticker = validatedOrderDao.getTickerName().toUpperCase();
+        String orderType = validatedOrderDao.getSide().toLowerCase();
+        String URI = "/orderbook/" +ticker+ "/" + orderType;
         return  WebClient.builder().baseUrl("https://exchange2.matraining.com")
                 .build().get()
-                .uri("/orderbook/" +ticker+ "/open")
+                .uri(URI)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToFlux(OderData.class);
+                .bodyToFlux(OrderData.class);
     }
 
 
-    public List<OderData> fetchAllOrderData1() {
+    public List<OrderData> fetchAllOrderData1() {
         return orderDataDao.getAllOrderData();
     }
 
-    public List<OderData> serviceFilterByProductName (String product) {
+    public List<OrderData> serviceFilterByProductName (String product) {
         return orderDataDao.filterByProductName(product);
     }
 
-    public Optional<OderData> serviceGetBestSellingValue(String product) {
+    public Optional<OrderData> serviceGetBestSellingValue(String product) {
         return orderDataDao.getBestBuyingValue(product);
     }
 
-    public Optional<OderData> serviceGetBestBuyingValue(String product) {
+    public Optional<OrderData> serviceGetBestBuyingValue(String product) {
         return orderDataDao.getBestSellingValue(product);
     }
+
+
+//    public List<OrderData> sortOrderDataForBuy1() {
+//
+//        return orderDataDao.sortOrderDataForBuy();
+//    }
 
 //    public double BuyingValue(String ticker) {
 //        return marketDataDao.getElement(ticker);

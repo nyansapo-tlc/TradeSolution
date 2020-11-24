@@ -3,25 +3,22 @@ package nyansapo.tradesolution.Entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ValidatedOrder {
-    @JsonProperty("")
-    private int ID;
 
-    @JsonProperty("")
+//    @JsonProperty("product")
     private  String validatedProductName;
 
-    @JsonProperty("")
+//    @JsonProperty("side")
     private String validatedSide;
 
-    @JsonProperty("")
+//    @JsonProperty("price")
     private double validatedAmount;
 
-    @JsonProperty("")
+//    @JsonProperty("quantity")
     private int validatedQuantity;
 
     public ValidatedOrder() {}
 
-    public ValidatedOrder(int ID, String validatedProductName, String validatedSide, double validatedAmount, int validatedQuantity) {
-        this.ID = ID;
+    public ValidatedOrder( String validatedProductName, String validatedSide, double validatedAmount, int validatedQuantity) {
         this.validatedProductName = validatedProductName;
         this.validatedSide = validatedSide;
         this.validatedAmount = validatedAmount;
@@ -30,8 +27,8 @@ public class ValidatedOrder {
 
 //setters
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setValidatedProductName(String validatedProductName) {
+        this.validatedProductName = validatedProductName;
     }
 
     public void setValidatedSide(String validatedSide) {
@@ -45,12 +42,11 @@ public class ValidatedOrder {
     public void setValidatedQuantity(int validatedQuantity) {
         this.validatedQuantity = validatedQuantity;
     }
+
+
 //getters
 
 
-    public int getID() {
-        return ID;
-    }
 
     public String getValidatedProductName() {
         return validatedProductName;

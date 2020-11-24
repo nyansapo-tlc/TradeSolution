@@ -1,22 +1,27 @@
 package nyansapo.tradesolution.Dao;
 
+import nyansapo.tradesolution.Entity.OrderData;
+import nyansapo.tradesolution.Entity.RequestOrder;
 import nyansapo.tradesolution.Entity.ValidatedOrder;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ValidatedOrderDao {
 
-    private static List<ValidatedOrder> validatedOrderList;
-    ValidatedOrder validatedOrder = new ValidatedOrder(1, "IBM", "BUY", 110, 1000);
+    private static final List<ValidatedOrder> validatedOrderList;
+    ValidatedOrder validatedOrder = new ValidatedOrder();
 
     OrderDataDao orderDataDao = new OrderDataDao();
+    RequestOrder requestOrder = new RequestOrder();
 
     static {
         validatedOrderList = new ArrayList<ValidatedOrder>() {
-//            {
-//                add( new ValidatedOrder(1, "IBM", "BUY", 110, 1000));
-//            }
+            {
+                new ValidatedOrder("IBM", "BUY", 0.11, 5);
+            }
         };
     }
 
@@ -32,7 +37,7 @@ public class ValidatedOrderDao {
     }
 
     public List<ValidatedOrder> order() {
-        double bidPrice = validatedOrder.getValidatedQuantity()/validatedOrder.getValidatedAmount();
+        double price = validatedOrder.getValidatedQuantity()/validatedOrder.getValidatedAmount();
         if (validatedOrder.getValidatedSide().equals("BUY")) {
             orderDataDao.getBestBuyingValue(validatedOrder.getValidatedSide());
         }
@@ -42,5 +47,13 @@ public class ValidatedOrderDao {
     public String getTickerName (){
         return validatedOrder.getValidatedProductName();
     }
+
+    public String getSide () {
+        return  validatedOrder.getValidatedSide();
+    }
+
+
+
+
 
 }
