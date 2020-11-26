@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ValidatedOrder {
 
-//    @JsonProperty("product")
+    @JsonProperty("product")
     private  String validatedProductName;
 
-//    @JsonProperty("side")
+    @JsonProperty("side")
     private String validatedSide;
 
-//    @JsonProperty("price")
+    @JsonProperty("price")
     private double validatedAmount;
 
-//    @JsonProperty("quantity")
+    @JsonProperty("quantity")
     private int validatedQuantity;
 
     public ValidatedOrder() {}
@@ -46,8 +46,6 @@ public class ValidatedOrder {
 
 //getters
 
-
-
     public String getValidatedProductName() {
         return validatedProductName;
     }
@@ -62,5 +60,15 @@ public class ValidatedOrder {
 
     public int getValidatedQuantity() {
         return validatedQuantity;
+    }
+
+    @Override
+    public String toString() {
+        return "ValidatedOrder{" +
+                "validatedProductName='" + validatedProductName + '\'' +
+                ", validatedSide='" + validatedSide + '\'' +
+                ", validatedAmount=" + validatedAmount +
+                ", validatedQuantity=" + validatedQuantity +
+                '}';
     }
 }

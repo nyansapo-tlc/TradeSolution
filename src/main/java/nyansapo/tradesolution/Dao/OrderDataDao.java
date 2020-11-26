@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository
 public class OrderDataDao {
@@ -16,7 +15,7 @@ public class OrderDataDao {
     OrderData orderData = new OrderData();
 
     static {
-        orderDataList = new ArrayList<OrderData>() {
+        orderDataList = new ArrayList<>() {
 
         };
     }
@@ -29,7 +28,6 @@ public class OrderDataDao {
         if (!this.orderDataList.isEmpty() && this.orderDataList.size() >= 8) {
             this.orderDataList.clear();
         }
-//        this.orderDataList.sort(Comparator.comparing(OrderData::getPrice));
         this.orderDataList.add(orderData);
 
 
@@ -41,46 +39,16 @@ public class OrderDataDao {
     }
 
 
-    public Optional<OrderData> getBestSellingValue(String product) {
-        return filterByProductName(product).stream().min(Comparator.comparing(OrderData::getPrice));
+    public Optional<OrderData> getBestSellingValue() {
+        return orderDataList.stream().min(Comparator.comparing(OrderData::getPrice));
     }
 
-//    public List<OrderData> sortOrderDataForBuy() {
-//
-//        return orderDataList.stream().sorted().filter(p -> p.getPrice() >= validatedOrder.getValidatedAmount()).collect(Collectors.toList());
-//    }
 
-    public Optional <OrderData> getBestBuyingValue(String product) {
-        return filterByProductName(product).stream().max(Comparator.comparing(OrderData::getPrice));
+    public Optional <OrderData> getBestBuyingValue() {
+        return orderDataList.stream().max(Comparator.comparing(OrderData::getPrice));
     }
 
-//    public String createOrder() {
-//        if(validatedOrder.getValidatedSide().toUpperCase() == "BUY" ) {
-//           orderDataList.stream().sorted().filter(p -> p.getPrice() <= validatedOrder.getValidatedAmount()).collect(Collectors.toList());
-//        }
-//        else {
-//            orderDataList.stream().sorted().filter(p -> p.getPrice() >= validatedOrder.getValidatedAmount()).collect(Collectors.toList());
-//        }
-//        int Qty = validatedOrder.getValidatedQuantity();
-//
-//        for (OrderData data:orderDataList) {
-//            int availableQty = Qty - orderData.getCumulatitiveQty();
-//            if (availableQty > Qty) {
-//
-//
-//            }
-//        }
-//
-//    }
 
-
-
-//    public String Base_URL () {
-//
-//        if (validatedOrder.getValidatedSide().toUpperCase() == "BUY") {
-//
-//        }
-//    }
 
 
 }

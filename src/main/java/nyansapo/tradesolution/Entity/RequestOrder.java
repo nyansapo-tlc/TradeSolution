@@ -63,4 +63,14 @@ public class RequestOrder {
     }
 
 
+    @Override
+    public String toString() {
+        return "RequestOrder{" +
+                "product='" + product + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", side='" + side + '\'' +
+                ", baseURL='" + baseURL + '\'' +
+                '}';
+    }
 }
